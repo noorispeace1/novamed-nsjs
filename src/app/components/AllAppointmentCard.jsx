@@ -104,7 +104,7 @@ const AllAppointmentCard = ({ appointment }) => {
           href={`/all-appointment/${_id}`}
           className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200 text-sm shadow-sm hover:shadow shadow-blue-100"
         >
-        View Dr.Details
+        View Details
         </Link>
       </div>
     </div>

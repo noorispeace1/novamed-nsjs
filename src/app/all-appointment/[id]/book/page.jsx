@@ -68,7 +68,9 @@ export default function BookAppointmentPage() {
       if (!res.ok) throw new Error("Failed to book appointment");
 
       alert("Appointment Confirmed Successfully!");
-      router.push("/all-appointment"); 
+      
+      // Target redirect route changed to /my-booking as requested
+      router.push("/my-booking"); 
     } catch (error) {
       console.error("Error creating booking:", error);
       alert("Failed to confirm booking. Please try again.");
@@ -191,7 +193,7 @@ export default function BookAppointmentPage() {
               placeholder="Brief reason for visit"
               value={formData.reason}
               onChange={handleChange}
-              rows="2"
+              rows={2}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 resize-none"
             ></textarea>
           </div>
@@ -209,3 +211,4 @@ export default function BookAppointmentPage() {
     </div>
   );
 }
+
