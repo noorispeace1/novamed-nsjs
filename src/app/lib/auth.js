@@ -24,7 +24,7 @@ export const auth = betterAuth({
     enabled:true,
     strategy:"compact",
     
-    // maxAge:20* 24* 60 * 60
+    maxAge:20* 24* 60 * 60
   }
     },
     plugins:[
