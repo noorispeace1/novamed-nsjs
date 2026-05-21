@@ -73,7 +73,6 @@ const Bannerfixed = () => {
  
   const continuousList = [...specialties, ...specialties];
 
-  // Framer Motion Animation Loop (Pure High-End Webflow/Stripe Style)
   useAnimationFrame((time, delta) => {
     if (!trackRef.current || isHovered) return;
 

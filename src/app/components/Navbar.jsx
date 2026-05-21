@@ -48,9 +48,6 @@ const Navbar = () => {
         { name: 'Dashboard', href: '/dashboard/my-bookings' },
     ];
 
-    // if (isPending) {
-    //     return <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-teal-100/60 h-20 w-full z-50" />;
-    // }
 
     return (
         <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-teal-100/60 shadow-sm relative z-50 transition-all duration-300">
