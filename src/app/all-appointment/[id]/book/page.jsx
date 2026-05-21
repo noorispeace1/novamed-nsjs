@@ -95,7 +95,6 @@ export default function BookAppointmentPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12">
-      {/* React Hot Toast UI Component Wrapper */}
       <Toaster position="top-center" reverseOrder={false} />
 
       <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-100">
