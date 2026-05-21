@@ -19,6 +19,7 @@ const ProfilePage = () => {
     } = authClient.useSession();
     
     const user = session?.user;
+
     
     const [bookings, setBookings] = useState([]);
     const [isBookingsLoading, setIsBookingsLoading] = useState(false);
@@ -163,7 +164,7 @@ const ProfilePage = () => {
                                                 title="Click to download image"
                                             >
                                                 <Avatar 
-                                                    src={image || "https://picsum.photos/200"} 
+                                                    src={user.image || "https://picsum.photos/200"} 
                                                     name={name || "U"}
                                                     className="w-32 h-32 text-2xl ring-4 ring-white dark:ring-zinc-900 font-bold shadow-inner transition-transform duration-200 hover:scale-105"
                                                 />
