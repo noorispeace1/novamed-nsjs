@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/app/lib/auth-client";
+import toast, { Toaster } from "react-hot-toast"; // React Hot Toast import kora hoyeche
 
 export default function BookAppointmentPage() {
   const router = useRouter();
@@ -46,41 +47,57 @@ export default function BookAppointmentPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      alert("Please login to book an appointment");
+      toast.error("Please login to book an appointment");
       return;
     }
     setSubmitting(true);
 
-    try {
-      const apiUri = process.env.NEXT_PUBLIC_API_URI;
-      const res = await fetch(`${apiUri}/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          doctorId: id,
-          ...formData
-        }),
-      });
+    // Toast dynamic resolve korar jonno promise loading message set kora holo
+    const bookingPromise = new Promise(async (resolve, reject) => {
+      try {
+        const apiUri = process.env.NEXT_PUBLIC_API_URI;
+        const res = await fetch(`${apiUri}/bookings`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            doctorId: id,
+            ...formData
+          }),
+        });
 
-      if (!res.ok) throw new Error("Failed to book appointment");
+        if (!res.ok) throw new Error("Failed to book appointment");
+        resolve(res);
+      } catch (error) {
+        reject(error);
+      }
+    });
 
-      alert("Appointment Confirmed Successfully!");
-      
-      // Target redirect route changed to /my-booking as requested
-      router.push("/my-booking"); 
-    } catch (error) {
-      console.error("Error creating booking:", error);
-      alert("Failed to confirm booking. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
+    // Premium styling input toast notification logic
+    toast.promise(bookingPromise, {
+      loading: "Confirming your booking...",
+      success: () => {
+        setSubmitting(false);
+        // Request onushare successful hole router path change hobe `/my-bookings` e
+        setTimeout(() => {
+          router.push("/my-bookings");
+        }, 1000); // User jeno clean status message dekte pare tai 1s delay
+        return "Appointment Confirmed Successfully! 🎉";
+      },
+      error: () => {
+        setSubmitting(false);
+        return "Failed to confirm booking. Please try again.";
+      }
+    });
   };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12">
+      {/* React Hot Toast UI Component Wrapper */}
+      <Toaster position="top-center" reverseOrder={false} />
+
       <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-100">
         
         <div className="p-6 pb-4 border-b border-slate-100 flex justify-between items-center">
@@ -211,4 +228,3 @@ export default function BookAppointmentPage() {
     </div>
   );
 }
-
