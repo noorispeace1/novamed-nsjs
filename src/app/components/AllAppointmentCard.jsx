@@ -94,11 +94,11 @@ const AllAppointmentCard = ({ appointment }) => {
           <span className="text-base font-black text-slate-900">৳ {fee || '500'}</span>
         </div>
         <Link
-          href={`/all-appointment/${_id}`}
-          className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200 text-sm shadow-sm hover:shadow shadow-blue-100"
-        >
-          View Details
-        </Link>
+  href={`/all-appointment/${_id}`}
+  className="block w-full text-center bg-slate-900 hover:bg-slate-800 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 text-sm shadow-sm hover:shadow-md border border-slate-800"
+>
+  View Details
+</Link>
       </div>
     </div>
   );
