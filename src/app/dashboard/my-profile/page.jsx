@@ -20,7 +20,6 @@ const ProfilePage = () => {
     
     const user = session?.user;
 
-    
     const [bookings, setBookings] = useState([]);
     const [isBookingsLoading, setIsBookingsLoading] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -29,6 +28,7 @@ const ProfilePage = () => {
     const [email, setEmail] = useState("");
     const [image, setImage] = useState("");
 
+    // ইউজার সেশন লোড হলে লোকাল স্টেট আপডেট করা
     useEffect(() => {
         if (user) {
             setName(user.name || "");
@@ -37,6 +37,7 @@ const ProfilePage = () => {
         }
     }, [user]);
 
+    // বুকিং ডাটা ফেচ করা
     useEffect(() => {
         if (!user?.id) return;
 
@@ -60,6 +61,7 @@ const ProfilePage = () => {
         });
     }, [user?.id]);
 
+    // প্রোফাইল আপডেট হ্যান্ডলার
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         setIsUpdating(true);
@@ -87,6 +89,7 @@ const ProfilePage = () => {
         }
     };
 
+    // ডিভাইস থেকে ছবি আপলোড হ্যান্ডলার (Base64)
     const handleImageChange = (e) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -98,6 +101,7 @@ const ProfilePage = () => {
         }
     };
 
+    // এভাটারে ক্লিক করলে ছবি ডাউনলোড করার হ্যান্ডলার
     const handleDownloadImage = async () => {
         const currentImage = image || "https://picsum.photos/200";
         try {
@@ -117,6 +121,7 @@ const ProfilePage = () => {
         }
     };
   
+    // লোডিং স্টেট
     if (isSessionPending) {
         return (
             <div className="flex justify-center items-center min-h-screen w-full bg-gradient-to-br from-slate-50 via-zinc-100 to-slate-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-neutral-950">
@@ -128,6 +133,7 @@ const ProfilePage = () => {
         );
     }
 
+    // এরর স্টেট
     if (sessionError) {
         return (
             <div className="flex justify-center items-center min-h-screen w-full bg-gradient-to-br from-slate-50 via-zinc-100 to-slate-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-neutral-950">
@@ -144,17 +150,20 @@ const ProfilePage = () => {
         <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-zinc-100 to-slate-200 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 flex flex-col justify-center py-10 lg:py-16 relative overflow-hidden">
             <Toaster position="top-center" reverseOrder={false} />
             
+            {/* ব্যাকগ্রাউন্ড ডেকোরেশন */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-[#0091A1]/5 dark:bg-[#0091A1]/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     
+                    {/* বাম পাশের ফর্ম (অ্যাকাউন্ট সেটিংস) */}
                     <div className="lg:col-span-5 h-full">
                         <form onSubmit={handleUpdateProfile} className="h-full">
                             <Card className="p-6 sm:p-8 shadow-xl border border-white/60 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-2xl">
                                 <div className="flex flex-col items-center space-y-6">
                                     
+                                    {/* প্রোফাইল এভাটার সেকশন */}
                                     <div className="relative group">
                                         <div className="absolute inset-0 bg-gradient-to-tr from-[#0091A1] to-cyan-400 rounded-full blur opacity-40 group-hover:opacity-60 transition duration-300" />
                                         <div className="relative">
@@ -164,7 +173,8 @@ const ProfilePage = () => {
                                                 title="Click to download image"
                                             >
                                                 <Avatar 
-                                                    src={user.image || "https://picsum.photos/200"} 
+                                                    // এখানে user.image এর বদলে রিঅ্যাক্ট স্টেট 'image' ব্যবহার করা হয়েছে
+                                                    src={image || "https://picsum.photos/200"} 
                                                     name={name || "U"}
                                                     className="w-32 h-32 text-2xl ring-4 ring-white dark:ring-zinc-900 font-bold shadow-inner transition-transform duration-200 hover:scale-105"
                                                 />
@@ -191,6 +201,7 @@ const ProfilePage = () => {
                                         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Manage profile data and identities</p>
                                     </div>
 
+                                    {/* ইনপুট ফিল্ডস */}
                                     <div className="w-full space-y-4 pt-2">
                                         <Input 
                                             label="Full Name" 
@@ -242,6 +253,7 @@ const ProfilePage = () => {
                         </form>
                     </div>
 
+                    {/* ডান পাশের সেকশন (বুকিংস) */}
                     <div className="lg:col-span-7 space-y-6">
                         <Card className="p-6 border border-white/60 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-xl rounded-3xl">
                             <div className="flex items-center justify-between mb-6">
@@ -307,6 +319,7 @@ const ProfilePage = () => {
                             )}
                         </Card>
 
+                        {/* সিকিউরিটি ফুটনোট */}
                         <div className="p-4 bg-zinc-900/[0.02] dark:bg-white/[0.01] rounded-2xl border border-zinc-200/50 dark:border-zinc-800/40 backdrop-blur-sm flex items-center justify-center gap-3">
                             <ShieldCheck size={16} className="text-[#0091A1] shrink-0" />
                             <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 tracking-wide leading-relaxed text-center">
