@@ -1,12 +1,16 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import { Avatar, Card, Input, Button } from '@heroui/react';
-import { useState, useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import { Camera, User, Mail, Save, Calendar, CheckCircle2, Clock, ShieldCheck, Bookmark } from 'lucide-react';
+import { 
+  Camera, User, Mail, Save, Calendar, 
+  CheckCircle2, Clock, ShieldCheck, Bookmark 
+} from 'lucide-react';
 import { authClient } from '@/app/lib/auth-client';
 
 const ProfilePage = () => {
+    const fileInputRef = useRef(null);
     const { 
         data: session, 
         isPending: isSessionPending, 
@@ -47,7 +51,7 @@ const ProfilePage = () => {
             setBookings(data);
         })
         .catch((error) => {
-            console.error("Error loading bookings data:", error);
+            console.error(error);
             toast.error("Could not load bookings.");
         })
         .finally(() => {
@@ -61,8 +65,7 @@ const ProfilePage = () => {
 
         const updatedData = {
             name: name,
-            image: image,
-            
+            image: image
         };
 
         try {
@@ -80,6 +83,36 @@ const ProfilePage = () => {
             console.error(error);
         } finally {
             setIsUpdating(false);
+        }
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleDownloadImage = async () => {
+        const currentImage = image || "https://picsum.photos/200";
+        try {
+            const response = await fetch(currentImage);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${name || "user"}-profile.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to download image.");
         }
     };
   
@@ -107,33 +140,48 @@ const ProfilePage = () => {
     }
 
     return (
-
         <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-zinc-100 to-slate-200 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 flex flex-col justify-center py-10 lg:py-16 relative overflow-hidden">
-            {/* Ambient Background Decorative Graphics */}
+            <Toaster position="top-center" reverseOrder={false} />
+            
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-[#0091A1]/5 dark:bg-[#0091A1]/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     
-                    {/* LEFT COMPONENT: Advanced Profile Edit Section */}
                     <div className="lg:col-span-5 h-full">
                         <form onSubmit={handleUpdateProfile} className="h-full">
                             <Card className="p-6 sm:p-8 shadow-xl border border-white/60 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-2xl">
                                 <div className="flex flex-col items-center space-y-6">
                                     
-                                    {/* Avatar Structure */}
                                     <div className="relative group">
                                         <div className="absolute inset-0 bg-gradient-to-tr from-[#0091A1] to-cyan-400 rounded-full blur opacity-40 group-hover:opacity-60 transition duration-300" />
                                         <div className="relative">
-                                            <Avatar 
-                                                src={image || user?.image || "https://picsum.photos/200"} 
-                                                name={name || "U"}
-                                                className="w-32 h-32 text-2xl ring-4 ring-white dark:ring-zinc-900 font-bold shadow-inner"
-                                            />
-                                            <label className="absolute bottom-1 right-1 bg-[#0091A1] p-2.5 rounded-full text-white shadow-lg cursor-pointer hover:bg-[#007b8a] transition-all duration-200 hover:scale-110 active:scale-95">
+                                            <div 
+                                                onClick={handleDownloadImage}
+                                                className="cursor-pointer"
+                                                title="Click to download image"
+                                            >
+                                                <Avatar 
+                                                    src={image || "https://picsum.photos/200"} 
+                                                    name={name || "U"}
+                                                    className="w-32 h-32 text-2xl ring-4 ring-white dark:ring-zinc-900 font-bold shadow-inner transition-transform duration-200 hover:scale-105"
+                                                />
+                                            </div>
+                                            <button 
+                                                type="button"
+                                                onClick={() => fileInputRef.current?.click()}
+                                                className="absolute bottom-1 right-1 bg-[#0091A1] p-2.5 rounded-full text-white shadow-lg cursor-pointer hover:bg-[#007b8a] transition-all duration-200 hover:scale-110 active:scale-95"
+                                            >
                                                 <Camera size={16} />
-                                            </label>
+                                            </button>
+                                            <input 
+                                                type="file" 
+                                                ref={fileInputRef} 
+                                                onChange={handleImageChange} 
+                                                className="hidden" 
+                                                accept="image/*"
+                                            />
                                         </div>
                                     </div>
 
@@ -142,7 +190,6 @@ const ProfilePage = () => {
                                         <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Manage profile data and identities</p>
                                     </div>
 
-                                    {/* Fields Section */}
                                     <div className="w-full space-y-4 pt-2">
                                         <Input 
                                             label="Full Name" 
@@ -194,7 +241,6 @@ const ProfilePage = () => {
                         </form>
                     </div>
 
-                    {/* RIGHT COMPONENT: Bookings Feed Module */}
                     <div className="lg:col-span-7 space-y-6">
                         <Card className="p-6 border border-white/60 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-xl rounded-3xl">
                             <div className="flex items-center justify-between mb-6">
@@ -227,9 +273,9 @@ const ProfilePage = () => {
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 gap-4 max-h-[440px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800">
-                                    {bookings.map((booking) => (
+                                    {bookings.map((booking, index) => (
                                         <div 
-                                            key={booking._id || booking.id} 
+                                            key={booking._id || booking.id || index} 
                                             className="p-4 border border-zinc-100 dark:border-zinc-800/80 rounded-2xl bg-white dark:bg-zinc-900/50 flex justify-between items-center hover:border-zinc-200 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-200 group"
                                         >
                                             <div className="space-y-2">
@@ -260,7 +306,6 @@ const ProfilePage = () => {
                             )}
                         </Card>
 
-                        {/* GDPR Protection Footer */}
                         <div className="p-4 bg-zinc-900/[0.02] dark:bg-white/[0.01] rounded-2xl border border-zinc-200/50 dark:border-zinc-800/40 backdrop-blur-sm flex items-center justify-center gap-3">
                             <ShieldCheck size={16} className="text-[#0091A1] shrink-0" />
                             <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 tracking-wide leading-relaxed text-center">

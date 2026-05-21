@@ -2,13 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-
-
 const AllAppointmentCard = ({ appointment }) => {
 
   if (!appointment) return null;
 
-  
   const {
     _id,
     name,
@@ -24,7 +21,6 @@ const AllAppointmentCard = ({ appointment }) => {
   return (
     <div className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 ease-out flex flex-col justify-between group">
       <div>
-        {/* Image Section */}
         <div className="relative h-44 w-full overflow-hidden bg-slate-50 p-3 pb-0">
           <div className="relative w-full h-full overflow-hidden rounded-xl">
             <Image
@@ -42,7 +38,6 @@ const AllAppointmentCard = ({ appointment }) => {
           )}
         </div>
 
-        {/* Info Section */}
         <div className="p-4 pb-2">
           <span className="inline-block text-[10px] font-bold tracking-wider uppercase text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md mb-2">
             {specialty || 'General Specialist'}
@@ -50,7 +45,7 @@ const AllAppointmentCard = ({ appointment }) => {
           <h3 className="text-base font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors duration-200">
             {name}
           </h3>
-          
+
           {hospital && (
             <p className="text-[11px] text-slate-400 font-semibold mb-2 flex items-center gap-1 mt-0.5">
               <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +59,6 @@ const AllAppointmentCard = ({ appointment }) => {
             {description || 'No description available for this practitioner.'}
           </p>
 
-          {/* Availability Slots */}
           <div className="border-t border-slate-50 pt-3">
             <p className="text-[11px] font-bold text-slate-600 mb-1.5 flex items-center gap-1">
               <svg className="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +88,6 @@ const AllAppointmentCard = ({ appointment }) => {
         </div>
       </div>
 
-      {/* Action / Fee Section */}
       <div className="p-4 pt-0 mt-auto">
         <div className="flex items-center justify-between border-t border-slate-50 pt-3 mb-3">
           <span className="text-[11px] font-semibold text-slate-400">Fee</span>
@@ -104,7 +97,7 @@ const AllAppointmentCard = ({ appointment }) => {
           href={`/all-appointment/${_id}`}
           className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200 text-sm shadow-sm hover:shadow shadow-blue-100"
         >
-        View Details
+          View Details
         </Link>
       </div>
     </div>

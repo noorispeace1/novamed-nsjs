@@ -20,5 +20,5 @@ const session = await auth.api.getSession({
 }
  
 export const config = {
-  matcher: ["/dashboard/:path*","/all-appointment"],
+  matcher: ["/dashboard/:path*","/all-appointment/:path*"],
 }
