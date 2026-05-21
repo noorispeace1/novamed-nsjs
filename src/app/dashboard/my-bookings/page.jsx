@@ -10,7 +10,7 @@ const MyBookingPage = async () => {
         headers: await headers(),
     });
 
-    // সেশন না থাকলে কমেন্ট আউট করা রিডাইরেক্টটি আপনি চাইলে এখানে অন করতে পারেন
+  
     if (!session) {
         redirect("/login");
     }
