@@ -52,7 +52,7 @@ export default function BookAppointmentPage() {
     }
     setSubmitting(true);
 
-    // Toast dynamic resolve korar jonno promise loading message set kora holo
+   
     const bookingPromise = new Promise(async (resolve, reject) => {
       try {
         const apiUri = process.env.NEXT_PUBLIC_API_URI;
@@ -80,11 +80,11 @@ export default function BookAppointmentPage() {
       loading: "Confirming your booking...",
       success: () => {
         setSubmitting(false);
-        // Request onushare successful hole router path change hobe `/my-bookings` e
+      
         setTimeout(() => {
-          router.push("/my-bookings");
-        }, 1000); // User jeno clean status message dekte pare tai 1s delay
-        return "Appointment Confirmed Successfully! 🎉";
+          router.push("/dashboard/my-bookings");
+        }, 1000); 
+        return "Appointment Confirmed Successfully!";
       },
       error: () => {
         setSubmitting(false);
